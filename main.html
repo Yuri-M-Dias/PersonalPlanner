@@ -17,15 +17,15 @@
 			</div>
 		</nav>
 
-		<form id="form" class="col s6 offset-s3">
+		<div id="form" class="col s6 offset-s3">
 
 			<div class="row">
 				<div class="input-field col s6">
-					<input id="valorOriginal" name="valorOriginal" type="text" class="validate">
+					<input id="valorOriginal" name="valorOriginal" type="text" class="validate" step="0.01">
 					<label for="valorOriginal">Valor Original</label>
 				</div>
 				<div class="input-field col s6">
-					<input id="taxa" name="taxa" type="number" class="validate">
+					<input id="taxa" name="taxa" type="number" class="validate" step="0.01">
 					<label for="taxa">Taxa</label>
 				</div>
 			</div>
@@ -46,24 +46,34 @@
 
 			<div class="row">
 				<div class="input-field col offset-s4">
-					<button class="twaves-effect waves-light btn-large">
+					<button data-target="modalResult" class="modal-trigger twaves-effect waves-light btn-large">
 						Calcular
 					</button>
 				</div>
 			</div>
-		</form>
 
-		<div class="col s6 offset-s3">
-			<div class="row">
+		</div>
+
+		<div id="modalResult" class="modal">
+			<div class="modal-content">
 				<h4>Resultado</h4>
-				<div class="col s6 input-field">
-					<input id="valorFinal" type="number" name="valorFinal" class="validate">
-					<label for="valorFinal">Valor Final</label>
+				<div class="row">
+					<div class="col s4">
+						<input id="prestacao" type="number" name="prestacao" step="0.01" readonly>
+						<label for="prestacao">Cada Prestação...</label>
+					</div>
+					<div class="col s4">
+						<input id="quantasVezes" type="number" name="quantasVezes" step="0.01" readonly>
+						<label for="quantasVezes">Multiplicado por...</label>
+					</div>
+					<div class="col s4">
+						<input id="valorFinal" type="number" name="valorFinal" step="0.01" readonly>
+						<label for="valorFinal">Resulta em.</label>
+					</div>
 				</div>
-				<div class="col s6 input-field">
-					<input id="prestacao" type="number" name="prestacao" class="validate">
-					<label for="prestacao">Prestação</label>
-				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Calcular de novo</a>
 			</div>
 		</div>
 
@@ -73,23 +83,43 @@
 			$(document).ready(function () {
 				$('select').material_select();
 
-				$('#form').submit( function(event) {
-					event.preventDefault();
-					var self = this;
-					console.log('Hello!');
-					var valorOriginal = Number($('#valorOriginal').val());
-					var taxa = Number($('#taxa').val());
-					var periodo = Number($('#periodo').val());
-					//TODO: calcular juros simples ou compostos
-					var porcetangemJuros = calculaPorcentagemJurosSimples(taxa, periodo);
-					var valorFinal = porcetangemJuros * valorOriginal;
-					var prestacao = valorFinal / periodo;
-					$('#valorFinal').val(valorFinal);
-					$('#prestacao').val(prestacao);
+				$('.modal-trigger').leanModal({
+					dismissible: true,
+					opacity: .5,
+					in_duration: 300,
+					out_duration: 200,
+					starting_top: '4%',
+					ending_top: '10%',
+					ready: function() {
+						var valorOriginal = Number($('#valorOriginal').val());
+						var taxa = Number($('#taxa').val());
+						var periodo = Number($('#periodo').val());
+						//TODO: calcular juros simples ou compostos
+						var tipoJuros = $('#tipoJuros').val();
+						var porcetangemJuros = 0;
+						var valorFinal = (1 + porcetangemJuros) * valorOriginal;
+						if(tipoJuros === 'S') {
+							porcetangemJuros = calculaJurosSimples(taxa, periodo);
+							valorFinal = (1 + porcetangemJuros) * valorOriginal;
+						} else if (tipoJuros === 'C') {
+							porcetangemJuros = calculaJurosCompostos(taxa, periodo);
+							valorFinal = porcetangemJuros * valorOriginal;
+						}
+						//TODO: cada prestação do composto?
+						var prestacao = valorFinal / periodo;
+						$('#valorFinal').val(valorFinal);
+						$('#prestacao').val(prestacao);
+						$('#quantasVezes').val(periodo);
+					}
 				});
 
-				function calculaPorcentagemJurosSimples(taxa, periodo) {
+				function calculaJurosSimples(taxa, periodo) {
 					var juros = (taxa / 100) * periodo;
+					return juros;
+				}
+
+				function calculaJurosCompostos(taxa, periodo) {
+					var juros = Math.pow(((taxa / 100) + 1), periodo);
 					return juros;
 				}
 
