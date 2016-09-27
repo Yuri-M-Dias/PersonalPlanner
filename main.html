@@ -2,16 +2,99 @@
 <html>
 
 	<head>
-		<title>Something very wrong</title>
-		<!-- Add materialize? And some logic behind it. Can work from remote. -->
-	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<title>PersonalPlanner</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+		<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 	</head>
 
-	<body>
-		<h1> I'm working!</h1>
-		<!-- Add javascript! -->
+	<body class="row">
+		<nav>
+			<div class="nav-wrapper teal darken-2">
+				<a href="#" class="brand-logo center">Cálculo de Juros Simples</a>
+			</div>
+		</nav>
+
+		<form id="form" class="col s6 offset-s3">
+
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="valorOriginal" name="valorOriginal" type="text" class="validate">
+					<label for="valorOriginal">Valor Original</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="taxa" name="taxa" type="number" class="validate">
+					<label for="taxa">Taxa</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="periodo" type="number" name="periodo" class="validate">
+					<label for="periodo">Período</label>
+				</div>
+				<div class="input-field col s3">
+					<select id="tipoJuros" name="tipoJuros">
+						<option value="S">Simples</option>
+						<option value="C">Composto</option>
+					</select>
+					<label>Tipo de Juros</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="input-field col offset-s4">
+					<button class="twaves-effect waves-light btn-large">
+						Calcular
+					</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="col s6 offset-s3">
+			<div class="row">
+				<h4>Resultado</h4>
+				<div class="col s6 input-field">
+					<input id="valorFinal" type="number" name="valorFinal" class="validate">
+					<label for="valorFinal">Valor Final</label>
+				</div>
+				<div class="col s6 input-field">
+					<input id="prestacao" type="number" name="prestacao" class="validate">
+					<label for="prestacao">Prestação</label>
+				</div>
+			</div>
+		</div>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
+		<script text="text/javascript">
+			$(document).ready(function () {
+				$('select').material_select();
+
+				$('#form').submit( function(event) {
+					event.preventDefault();
+					var self = this;
+					console.log('Hello!');
+					var valorOriginal = Number($('#valorOriginal').val());
+					var taxa = Number($('#taxa').val());
+					var periodo = Number($('#periodo').val());
+					//TODO: calcular juros simples ou compostos
+					var porcetangemJuros = calculaPorcentagemJurosSimples(taxa, periodo);
+					var valorFinal = porcetangemJuros * valorOriginal;
+					var prestacao = valorFinal / periodo;
+					$('#valorFinal').val(valorFinal);
+					$('#prestacao').val(prestacao);
+				});
+
+				function calculaPorcentagemJurosSimples(taxa, periodo) {
+					var juros = (taxa / 100) * periodo;
+					return juros;
+				}
+
+			});
+		</script>
 
 	</body>
 
