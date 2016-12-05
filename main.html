@@ -13,7 +13,7 @@
 	<body class="row">
 		<nav>
 			<div class="nav-wrapper teal darken-2">
-				<a href="#" class="brand-logo center">Cálculo de Juros Simples</a>
+				<a href="#" class="brand-logo center">Comparador custo ICMS</a>
 			</div>
 		</nav>
 
@@ -22,11 +22,26 @@
 			<div class="row">
 				<div class="input-field col s6">
 					<input id="valorOriginal" name="valorOriginal" type="text" class="validate" step="0.01">
-					<label for="valorOriginal">Valor Original</label>
+					<label for="valorOriginal">Valor Local</label>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="input-field col s6">
+					<select id="estadoOrigem" name="estadoOrigem">
+						<option value="TO">Tocantins</option>
+						<option value="GO">Goiás</option>
+						<option value="DF">Distrito Federal</option>
+					</select>
+					<label>Estado Origem</label>
 				</div>
 				<div class="input-field col s6">
-					<input id="taxa" name="taxa" type="number" class="validate" step="0.01">
-					<label for="taxa">Taxa</label>
+					<select id="estadoDestino" name="estadoDestino">
+						<option value="TO">Tocantins</option>
+						<option value="GO">Goiás</option>
+						<option value="DF">Distrito Federal</option>
+					</select>
+					<label>Estado Destino</label>
 				</div>
 			</div>
 
@@ -79,52 +94,7 @@
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
 
-		<script text="text/javascript">
-			$(document).ready(function () {
-				$('select').material_select();
-
-				$('.modal-trigger').leanModal({
-					dismissible: true,
-					opacity: .5,
-					in_duration: 300,
-					out_duration: 200,
-					starting_top: '4%',
-					ending_top: '10%',
-					ready: function() {
-						var valorOriginal = Number($('#valorOriginal').val());
-						var taxa = Number($('#taxa').val());
-						var periodo = Number($('#periodo').val());
-						//TODO: calcular juros simples ou compostos
-						var tipoJuros = $('#tipoJuros').val();
-						var porcetangemJuros = 0;
-						var valorFinal = (1 + porcetangemJuros) * valorOriginal;
-						if(tipoJuros === 'S') {
-							porcetangemJuros = calculaJurosSimples(taxa, periodo);
-							valorFinal = (1 + porcetangemJuros) * valorOriginal;
-						} else if (tipoJuros === 'C') {
-							porcetangemJuros = calculaJurosCompostos(taxa, periodo);
-							valorFinal = porcetangemJuros * valorOriginal;
-						}
-						//TODO: cada prestação do composto?
-						var prestacao = valorFinal / periodo;
-						$('#valorFinal').val(valorFinal);
-						$('#prestacao').val(prestacao);
-						$('#quantasVezes').val(periodo);
-					}
-				});
-
-				function calculaJurosSimples(taxa, periodo) {
-					var juros = (taxa / 100) * periodo;
-					return juros;
-				}
-
-				function calculaJurosCompostos(taxa, periodo) {
-					var juros = Math.pow(((taxa / 100) + 1), periodo);
-					return juros;
-				}
-
-			});
-		</script>
+		<script type="text/javascript" src="js/icms.js"></script>
 
 	</body>
 
