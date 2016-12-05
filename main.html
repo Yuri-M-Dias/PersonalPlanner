@@ -21,13 +21,17 @@
 
 			<div class="row">
 				<div class="input-field col s6">
-					<input id="valorOriginal" name="valorOriginal" type="text" class="validate" step="0.01">
-					<label for="valorOriginal">Valor Local</label>
+					<input id="valorLocal" name="valorLocal" type="number" class="validate" step="0.01">
+					<label for="valorLocal">Valor Local</label>
+				</div>
+				<div class="input-field col s6">
+					<input id="valorOriginal" name="valorOriginal" type="number" class="validate" step="0.01">
+					<label for="valorOriginal">Valor Importação</label>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="input-field col s6">
+				<div class="input-field col s4">
 					<select id="estadoOrigem" name="estadoOrigem">
 						<option value="TO">Tocantins</option>
 						<option value="GO">Goiás</option>
@@ -35,7 +39,7 @@
 					</select>
 					<label>Estado Origem</label>
 				</div>
-				<div class="input-field col s6">
+				<div class="input-field col s4">
 					<select id="estadoDestino" name="estadoDestino">
 						<option value="TO">Tocantins</option>
 						<option value="GO">Goiás</option>
@@ -43,26 +47,16 @@
 					</select>
 					<label>Estado Destino</label>
 				</div>
-			</div>
-
-			<div class="row">
-				<div class="input-field col s6">
-					<input id="periodo" type="number" name="periodo" class="validate">
-					<label for="periodo">Período</label>
-				</div>
-				<div class="input-field col s3">
-					<select id="tipoJuros" name="tipoJuros">
-						<option value="S">Simples</option>
-						<option value="C">Composto</option>
-					</select>
-					<label>Tipo de Juros</label>
+				<div class="input-field col s4">
+					<input id="aliquota" name="aliquota" type="number" class="validate" step="0.01">
+					<label for="aliquota">Alíquota(em %)</label>
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="input-field col offset-s4">
 					<button data-target="modalResult" class="modal-trigger twaves-effect waves-light btn-large">
-						Calcular
+						Calcular Diferença
 					</button>
 				</div>
 			</div>
@@ -74,16 +68,25 @@
 				<h4>Resultado</h4>
 				<div class="row">
 					<div class="col s4">
-						<input id="prestacao" type="number" name="prestacao" step="0.01" readonly>
-						<label for="prestacao">Cada Prestação...</label>
+						<input id="valorLocalResultado" type="number" name="valorLocalResultado" step="0.01" readonly>
+						<label for="valorLocalResultado">Valor Local<label>
 					</div>
 					<div class="col s4">
-						<input id="quantasVezes" type="number" name="quantasVezes" step="0.01" readonly>
-						<label for="quantasVezes">Multiplicado por...</label>
+						<input id="valorOriginalResultado" type="number" name="valorOriginalResultado" step="0.01" readonly>
+						<label for="valorOriginalResultado">Valor importação sem impostos<label>
 					</div>
 					<div class="col s4">
-						<input id="valorFinal" type="number" name="valorFinal" step="0.01" readonly>
-						<label for="valorFinal">Resulta em.</label>
+						<input id="resultadoComImpostos" type="number" name="resultadoComImpostos" step="0.01" readonly>
+						<label for="resultadoComImpostos">Valor com impostos<label>
+					</div>
+				</div>
+				<div class="row">
+                    <div class="col s4">
+                        <input id="valorImpostos" type="number" name="valorImpostos" step="0.01" readonly>
+                        <label for="valorImpostos">Valor dos impostos<label>
+                    </div>
+					<div class="col s6">
+						<b id="resultadoAvaliacao"></b>
 					</div>
 				</div>
 			</div>
@@ -93,7 +96,6 @@
 		</div>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-
 		<script type="text/javascript" src="js/icms.js"></script>
 
 	</body>

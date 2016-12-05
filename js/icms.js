@@ -55,51 +55,25 @@ $(document).ready(function () {
         ending_top: '10%',
         ready: function () {
             var valorOriginal = Number($('#valorOriginal').val());
-            var taxa = Number($('#taxa').val());
-            var periodo = Number($('#periodo').val());
-            //TODO: calcular juros simples ou compostos
-            var tipoJuros = $('#tipoJuros').val();
-            var porcetangemJuros = 0;
-            var valorFinal = (1 + porcetangemJuros) * valorOriginal;
-            if (tipoJuros === 'S') {
-                porcetangemJuros = calculaJurosSimples(taxa, periodo);
-                valorFinal = (1 + porcetangemJuros) * valorOriginal;
-            } else if (tipoJuros === 'C') {
-                porcetangemJuros = calculaJurosCompostos(taxa, periodo);
-                valorFinal = porcetangemJuros * valorOriginal;
+            var valorLocal = Number($('#valorLocal').val());
+            var aliquota = Number($('#aliquota').val());
+
+            var valorImpostos = valorOriginal * aliquota;
+            var valorComImpostos = valorOriginal + valorImpostos;
+
+            var resultadoAvaliacao = '';
+            if (valorLocal <= valorOriginal) {
+                resultadoAvaliacao = "É melhor comprar localmente."
+            } else {
+                resultadoAvaliacao = "É melhor comprar do outro estado."
             }
-            //TODO: cada prestação do composto?
-            var prestacao = valorFinal / periodo;
-            $('#valorFinal').val(valorFinal);
-            $('#prestacao').val(prestacao);
-            $('#quantasVezes').val(periodo);
+
+            $('#valorLocalResultado').val(valorLocal);
+            $('#valorOriginalResultado').val(valorOriginal);
+            $('#resultadoComImpostos').val(valorComImpostos);
+            $('#valorImpostos').val(valorImpostos);
+            $('#resultadoAvaliacao').text(resultadoAvaliacao);
         }
     });
-
-    function comparaUfs(current) {
-        return current.uf === ufEstadoOrigem;
-    }
-
-    function calculaTaxaICMSEntreEstados(ufEstadoOrigem, ufEstadoDestino) {
-        var estadoOrigem = estados.find(function (current) {
-            return current.uf === ufEstadoOrigem;
-        });
-        debugger;
-        var aliquotaOrigem = estadoOrigem.aliquotas.find(function (current) {
-            return current.uf === estadoOrigem.uf;
-        }).valor;
-        var estadoDestino = estados.find(function (current) {
-            return current.uf === ufEstadoDestino;
-        });
-        var aliquotaDestino = estadoDestino.aliquotas.find(function (current) {
-            return current.uf === estadoDestino.uf;
-        }).valor;
-        return {
-            ali1: aliquotaDestino,
-            ali2: aliquotaOrigem
-        };
-    }
-
-    console.log(['cálculo: ', calculaTaxaICMSEntreEstados('TO', 'GO')]);
 
 });
